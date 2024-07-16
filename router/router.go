@@ -3,6 +3,7 @@ package router
 import (
 	"net/http"
 
+	"github.com/PerryHuan9/learn_go/sql"
 	"github.com/gin-gonic/gin"
 )
 
@@ -50,5 +51,22 @@ func getUserById(context *gin.Context) {
 }
 
 func getUsers(context *gin.Context) {
+	rows, err := sql.Db().Query("select * from user;")
+	if err != nil {
+		context.IndentedJSON(http.StatusInternalServerError, err)
+		return
+	}
+	defer rows.Close()
+	var uses []User
+	for rows.Next() {
+		var user User
+		rows.Scan(&user.Id, &user.Name, &user.Age)
+		uses = append(uses, user)
+	}
+
+	if err := rows.Err(); err != nil {
+		context.IndentedJSON(http.StatusInternalServerError, err)
+		return
+	}
 	context.IndentedJSON(http.StatusOK, users)
 }
