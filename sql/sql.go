@@ -9,6 +9,11 @@ import (
 	"github.com/go-sql-driver/mysql"
 )
 
+type Test struct {
+	H int
+	h float32
+}
+
 var db *sql.DB
 
 func Db() *sql.DB {
