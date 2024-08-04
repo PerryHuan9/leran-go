@@ -19,6 +19,13 @@ var users = []User{
 }
 
 func RegisterUserRoute(server *gin.Engine) {
+	server.GET("/asciiJson", func(ctx *gin.Context) {
+		data := map[string]string{
+			"lang": "Go语言",
+			"tag":  "<br/>",
+		}
+		ctx.AsciiJSON(http.StatusOK, data)
+	})
 	server.GET("/users", getUsers)
 	server.GET("/users/:id", getUserById)
 	server.POST("/user/create", createUser)
